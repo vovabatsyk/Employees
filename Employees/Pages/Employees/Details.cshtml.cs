@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Employees.Models;
 using Employees.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +14,16 @@ namespace Employees.Pages.Employees
         {
             _employeeRepository = employeeRepository;
         }
-        public void OnGet(int id)
+        public IActionResult OnGet(int id)
         {
             Employee = _employeeRepository.GetEmployee(id);
+
+            if (Employee == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            return Page();
         }
     }
 }

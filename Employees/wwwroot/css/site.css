@@ -151,3 +151,7 @@ html {
     text-transform: uppercase;
     padding-left: 20px;
 }
+
+.cardBodyStyle {
+    background-color: #eee;
+}

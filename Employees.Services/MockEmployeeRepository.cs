@@ -6,7 +6,7 @@ using Employees.Models;
 
 namespace Employees.Services
 {
-    public class MockEmployeeRepository: IEmployeeRepository
+    public class MockEmployeeRepository : IEmployeeRepository
     {
         private List<Employee> _employeesList;
 
@@ -35,7 +35,7 @@ namespace Employees.Services
                     Id = 4, Name = "Mary", Email = "mary@gmail.com", Department = Dept.HR
                 }
 
-            };   
+            };
         }
 
         public IEnumerable<Employee> GetAllEmployees()
@@ -46,6 +46,21 @@ namespace Employees.Services
         public Employee GetEmployee(int id)
         {
             return _employeesList.FirstOrDefault(e => e.Id == id);
+        }
+
+        public Employee Update(Employee updatedEmployee)
+        {
+            Employee employee = _employeesList.FirstOrDefault(e => e.Id == updatedEmployee.Id);
+
+            if (employee != null)
+            {
+                employee.Name = updatedEmployee.Name;
+                employee.Email = updatedEmployee.Email;
+                employee.PhotoPath = updatedEmployee.PhotoPath;
+                employee.Department = updatedEmployee.Department;
+            }
+
+            return employee;
         }
     }
 }

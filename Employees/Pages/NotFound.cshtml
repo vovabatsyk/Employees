@@ -1,0 +1,18 @@
+﻿@page
+@model NotFoundModel
+@{
+    ViewData["Title"] = "Not Found";
+}
+
+<div class="row">
+    <div class="col text-center">
+        <img src="/images/NotFound.png" alt="Page Not Found" class="w-50" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col text-center">
+        <h1>Employee not found!</h1>
+        <a asp-page="/Employee/Employee" class="btn btn-primary">Back</a>
+    </div>
+</div>
