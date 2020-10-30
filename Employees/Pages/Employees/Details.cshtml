@@ -1,0 +1,49 @@
+﻿@page
+@model Employees.DetailsModel
+@{
+    ViewData["Title"] = "Employee Details";
+    var photoPath = $"/images/{Model.Employee.PhotoPath}";
+
+
+}
+
+<div class="row justify-content-center m-3">
+    <div class="col col-lg-8">
+
+        <div class="card cardBoxShadow">
+
+            <div class="card-header cardHeaderStyle">
+                <h1>@Model.Employee.Name</h1>
+            </div>
+
+            <div class="card-body text-center cardBodyStyle">
+                <div class="row">
+                    <div class="col col-lg-9">
+                        <h4 class="cardTextLeftFloating">Employee ID: @Model.Employee.Id</h4><hr />
+                        <h4 class="cardTextLeftFloating">Email: @Model.Employee.Email</h4><hr />
+                        <h4 class="cardTextLeftFloating">Department: <span class="text-danger font-weight-bold">@Model.Employee.Department</span> </h4><hr />
+                    </div>
+                    <div class="col col-lg-3">
+                        <div style="border-left: 1px solid rgba(0, 0, 0, .1);">
+                            <img src="@photoPath" alt="avatar"
+                                 asp-append-version="true"
+                                 class="card-img-top imageThumbnail border border-primary"
+                                 style="background-image: linear-gradient(to right top, #2fb8cd, #009dda, #007de6, #0056e1, #3909c0);" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card-footer text-center" style="background-color: rgba(0, 0, 0, 0.25); border-radius: 0 0 40px 0;">
+                        <a asp-page="/Employees/Employees" class="btn btn-success m-1 buttonShadow">Back</a>
+                        <a href="#" class="btn btn-primary m-1 buttonShadow">Edit</a>
+                        <a href="#" class="btn btn-danger m-1 buttonShadow">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

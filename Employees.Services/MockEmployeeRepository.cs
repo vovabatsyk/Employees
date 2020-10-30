@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Employees.Models;
 
@@ -40,6 +41,11 @@ namespace Employees.Services
         public IEnumerable<Employee> GetAllEmployees()
         {
             return _employeesList;
+        }
+
+        public Employee GetEmployee(int id)
+        {
+            return _employeesList.FirstOrDefault(e => e.Id == id);
         }
     }
 }
