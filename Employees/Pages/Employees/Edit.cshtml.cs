@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Employees.Models;
 using Employees.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -23,38 +20,80 @@ namespace Employees.Pages.Employees
             _environment = environment;
         }
 
-        public Employee Employee { get; private set; }
+        [BindProperty]
+        public Employee Employee { get; set; }
 
         [BindProperty]
         public IFormFile Photo { get; set; }
 
-        public IActionResult OnGet(int id)
+        [BindProperty]
+        public bool Notify { get; set; }
+
+        public string Message { get; set; }
+
+        public string AlertColor { get; set; }
+
+        public IActionResult OnGet(int? id)
         {
-            Employee = _employeeRepository.GetEmployee(id);
+            if (id.HasValue)
+            {
+                Employee = _employeeRepository.GetEmployee(id.Value);
+            }
+            else
+            {
+                Employee = new Employee();
+            }
 
             if (Employee == null)
-            {
                 return RedirectToPage("/NotFound");
-            }
 
             return Page();
         }
 
-        public IActionResult OnPost(Employee employee)
+        public IActionResult OnPost()
         {
-            if (Photo != null)
+            if (ModelState.IsValid)
             {
-                if (employee.PhotoPath != null)
+                if (Photo != null)
                 {
-                    string filePath = Path.Combine(_environment.WebRootPath, "images", employee.PhotoPath);
-                    System.IO.File.Delete(filePath);
+                    if (Employee.PhotoPath != null)
+                    {
+                        string filePath = Path.Combine(_environment.WebRootPath, "images", Employee.PhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+                    Employee.PhotoPath = ProcessUploadedFile();
                 }
-                employee.PhotoPath = ProcessUploadedFile();
+
+                if (Employee.Id > 0)
+                {
+                    Employee = _employeeRepository.Update(Employee);
+                    TempData["SuccessMessage"] = $"Update {Employee.Name} successful!";
+                }
+                else
+                {
+                    Employee = _employeeRepository.Add(Employee);
+                    TempData["SuccessMessage"] = $"Adding {Employee.Name} successful!";
+                }
+
+                return RedirectToPage("Employees");
+            }
+            return Page();
+        }
+
+        public void OnPostUpdateNotificationPreference(int id)
+        {
+            if (Notify)
+            {
+                Message = "Thank you for turning on notification";
+                AlertColor = "alert-success";
+            }
+            else
+            {
+                Message = "You have turning off notification";
+                AlertColor = "alert-danger";
             }
 
-
-            Employee = _employeeRepository.Update(employee);
-            return RedirectToPage("Employees");
+            Employee = _employeeRepository.GetEmployee(id);
         }
 
         private string ProcessUploadedFile()

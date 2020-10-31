@@ -1,56 +1,72 @@
-﻿@page "{id}"
+﻿@page "{id:min(1)?}/{handler?}"
 @model Employees.EditModel
 @{
-    ViewData["Title"] = $"Edit {Model.Employee.Name}";
     var photoPath = $"/images/{Model.Employee.PhotoPath ?? "noimage"}";
+    var flag = Model.Employee.Id > 0;
+    var buttonTitle = flag ? "Update" : "Create";
+    var pageTitle = flag ? "Edit" : "Add";
+    var cancelPath = flag ? "/employees/employees" : "/";
+    ViewData["Title"] = pageTitle;
 }
 
-<!--Создаём форму редактирования-->
-<form method="post" class="mt-3" enctype="multipart/form-data">
-    <!--Создаём скрытое поле для параметра ID-->
+<form method="post" asp-page-handler="UpdateNotificationPreference">
+    <div class="row text-center notifyBlock">
+        <div class="col form-check">
+            <h1>Notification Preference</h1>
+            <input asp-for="Notify" class="form-check-input" />
+            <label asp-for="Notify" class="form-check-label">
+                Receive email notification when my details change
+            </label><br />
+            <button type="submit" class="btn btn-primary text-center buttonShadow">Update Notification Preference</button>
+
+            @{
+                if (!string.IsNullOrWhiteSpace(Model.Message))
+                {
+                    <div class="alert @Model.AlertColor">
+                        <p class="p-3 mt-2">@Model.Message</p>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</form>
+<hr />
+
+<div asp-validation-summary="ModelOnly" class="text-center text-danger"></div>
+
+<form method="post" asp-page-handler="OnPost" class="mt-3" enctype="multipart/form-data">
     <input type="hidden" asp-for="Employee.Id" />
     <input type="hidden" asp-for="Employee.PhotoPath" />
 
-
-    <!--Добавляем поля редактирования-->
     <div class="row justify-content-center m-3">
         <div class="col col-lg-8">
             <div class="card cardBoxShadow">
                 <div class="card-header cardHeaderStyle text-center">
-                    <!--Добавляем поле редактирования имени-->
                     <div class="form-group row">
                         <label asp-for="Employee.Name" class="col col-lg-4 col-form-label text-right">Edit Name:</label>
                         <div class="col col-lg-6">
                             <input asp-for="Employee.Name" class="form-control" placeholder="@Model.Employee.Name" />
-                            <!--Добавляем сообщение валидации формы-->
                             <span asp-validation-for="Employee.Name" class="text-danger"></span>
                         </div>
                     </div>
-
                 </div>
                 <div class="card-body cardBodyStyle text-center">
                     <div class="row">
                         <div class="col col-lg-9">
                             <h4 class="cardTextLeftFloating">Employee ID: @Model.Employee.Id</h4><hr />
-
-                            <!--Добавляем поле редактирования e-mail-->
                             <div class="form-group row">
                                 <label asp-for="Employee.Email" class="col col-lg-4 col-form-label text-right">Edit E-mail:</label>
                                 <div class="col-12 col-lg-6">
                                     <input asp-for="Employee.Email" class="form-control mr-2" placeholder="@Model.Employee.Email" />
-                                    <!--Добавляем сообщение валидации формы-->
                                     <span asp-validation-for="Employee.Email" class="text-danger"></span>
                                 </div>
                             </div>
                             <hr />
-                            <!--Добавляем поле редактирования департамента-->
                             <div class="form-group row">
                                 <label asp-for="Employee.Department" class="col col-lg-4 col-form-label text-right">Edit Department:</label>
                                 <div class="col-12 col-lg-6">
-                                    <!--Создаём выпадающий список с департаментами-->
-                                    <!--Необходимо подключить класс локально или глобально-->
                                     <select asp-for="Employee.Department" class="custom-select mr-2" asp-items="Html.GetEnumSelectList<Dept>()">
-                                        <!--Добавляем начальный элемент выпадающего списка-->
                                         <option value="">Please Select</option>
                                     </select>
                                     <span asp-validation-for="Employee.Department" class="text-danger"></span>
@@ -58,7 +74,6 @@
                             </div>
                             <hr />
                         </div>
-
                         <div class="col col-lg-3">
                             <div>
                                 <img src="@photoPath"
@@ -72,13 +87,12 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="row">
                         <div class="col">
                             <div class="card-footer text-center" style="background-color: rgba(0, 0, 0, 0.25);">
-                                <button type="submit" class="btn btn-success buttonShadow">Update</button>
-                                <a href="/Employees/Details/@Model.Employee.Id" class="btn btn-danger buttonShadow">Cancel</a>
+                                <button type="submit" class="btn btn-success buttonShadow">@buttonTitle</button>
+                                <a href="@cancelPath" class="btn btn-danger buttonShadow">Cancel</a>
                             </div>
                         </div>
                     </div>
@@ -97,6 +111,8 @@
                 });
             });
         </script>
+        
+        <partial name="_ValidationScriptsPartial" />
     }
 
 </form>

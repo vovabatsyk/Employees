@@ -16,11 +16,15 @@ namespace Employees.Services
             {
                 new Employee()
                 {
+                    Id = 0, Name = "admin", Email = "admin@gmail.com", PhotoPath = "avatar5.png", Department = Dept.None
+                },
+                new Employee()
+                {
                     Id = 1, Name = "webProger", Email = "web@gmail.com", PhotoPath = "avatar.png", Department = Dept.HR
                 },
                 new Employee()
                 {
-                    Id = 2, Name = "Volodymyr", Email = "Volodymyr@gmail.com", PhotoPath = "avatar2.png", Department = Dept.IT
+                    Id = 2, Name = "Volodymyr", Email = "Volodymyr@gmail.com", PhotoPath = "avatar4.png", Department = Dept.IT
                 },
                 new Employee()
                 {
@@ -61,6 +65,14 @@ namespace Employees.Services
             }
 
             return employee;
+        }
+
+        public Employee Add(Employee newEmployee)
+        {
+            newEmployee.Id = _employeesList.Max(x => x.Id) + 1;
+            _employeesList.Add(newEmployee);
+
+            return newEmployee;
         }
     }
 }

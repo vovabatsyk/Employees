@@ -4,6 +4,13 @@
     ViewData["Title"] = "Employees";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+<div class="alert alert-success text-center">
+    @TempData["SuccessMessage"]
+</div>
+}
+
 <h1>Employees</h1>
 <div class="row">
     @foreach (var item in Model.Employees)
@@ -23,7 +30,10 @@
 
                     <div class="card-footer text-center">
                         <a asp-page="/Employees/Details" asp-route-id="@item.Id" class="btn btn-success m-1 buttonShadow">View</a>
-                        <a asp-page="/Employees/Edit" asp-route-id="@item.Id" class="btn btn-primary m-1 buttonShadow">Edit</a>
+                        @if (item.Id > 0)
+                        {
+                            <a asp-page="/Employees/Edit" asp-route-id="@item.Id" class="btn btn-primary m-1 buttonShadow">Edit</a>
+                        }
                         <a href="#" class="btn btn-danger m-1 buttonShadow">Delete</a>
 
                     </div>
