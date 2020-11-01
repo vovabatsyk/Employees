@@ -56,7 +56,7 @@ namespace Employees.Pages.Employees
             {
                 if (Photo != null)
                 {
-                    if (Employee.PhotoPath != null)
+                    if (Employee.PhotoPath != null && Employee.PhotoPath != "noimage.png")
                     {
                         string filePath = Path.Combine(_environment.WebRootPath, "images", Employee.PhotoPath);
                         System.IO.File.Delete(filePath);
