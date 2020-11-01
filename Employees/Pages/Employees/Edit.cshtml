@@ -12,7 +12,7 @@
 @if (flag)
 {
     <form method="post" asp-page-handler="UpdateNotificationPreference">
-        <div class="row text-center notifyBlock">
+        <div class="row text-center">
             <div class="col form-check">
                 <h1>Notification Preference</h1>
                 <input asp-for="Notify" class="form-check-input"/>
@@ -70,7 +70,7 @@
                                 <label asp-for="Employee.Department" class="col col-lg-4 col-form-label text-right">Edit Department:</label>
                                 <div class="col-12 col-lg-6">
                                     <select asp-for="Employee.Department" class="custom-select mr-2" asp-items="Html.GetEnumSelectList<Dept>()">
-                                        <option value="">Please Select</option>
+                                        @*<option value="">@Dept.None</option>*@
                                     </select>
                                     <span asp-validation-for="Employee.Department" class="text-danger"></span>
                                 </div>

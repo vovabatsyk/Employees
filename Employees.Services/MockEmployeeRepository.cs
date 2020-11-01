@@ -6,7 +6,7 @@ namespace Employees.Services
 {
     public class MockEmployeeRepository : IEmployeeRepository
     {
-        private List<Employee> _employeesList;
+        private readonly List<Employee> _employeesList;
 
         public MockEmployeeRepository()
         {
