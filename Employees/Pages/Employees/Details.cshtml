@@ -1,0 +1,57 @@
+﻿@page "{id}"
+@model Employees.DetailsModel
+@{
+    ViewData["Title"] = "Employee Details";
+    var photoPath = $"/images/{Model.Employee.PhotoPath ?? "noimage.png"}";
+
+
+}
+<div class="row justify-content-center m-2">
+    <div class="col-12 col-lg-8">
+        @await Component.InvokeAsync("HeadCount", new { dept = Model.Employee.Department });
+    </div>
+</div>
+
+<div class="row justify-content-center mt-2">
+    <div class="col-12 col-lg-8">
+
+        <div class="card cardBoxShadow">
+
+            <div class="card-header cardHeaderStyle">
+                <h1>@Model.Employee.Name</h1>
+            </div>
+
+            <div class="card-body text-center cardBodyStyle">
+                <div class="row">
+                    <div class="col-12 col-md-8 col-lg-8">
+                        <h4 class="cardTextLeftFloating">Employee ID: @Model.Employee.Id</h4><hr />
+                        <h4 class="cardTextLeftFloating">Email: @Model.Employee.Email</h4><hr />
+                        <h4 class="cardTextLeftFloating">Department: <span class="text-danger font-weight-bold">@Model.Employee.Department</span> </h4><hr />
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div style="border-left: 1px solid rgba(0, 0, 0, .1);">
+                            <img src="@photoPath" alt="avatar"
+                                 asp-append-version="true"
+                                 class="card-img-top imageThumbnail border border-primary"
+                                 style="background-image: linear-gradient(to right top, #2fb8cd, #009dda, #007de6, #0056e1, #3909c0);" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card-footer text-center cardFooterStyle">
+                        <a asp-page="/employees/employees" class="btn btn-success m-1 buttonShadow">Back</a>
+                        @if (Model.Employee.Id > 0)
+                        {
+                            <a asp-page="/employees/edit" asp-route-id="@Model.Employee.Id" class="btn btn-primary m-1 buttonShadow">Edit</a>
+                            <a asp-page="/employees/delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger m-1 buttonShadow">Delete</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

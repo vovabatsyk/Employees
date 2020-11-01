@@ -1,0 +1,121 @@
+﻿@page "{id:min(1)?}/{handler?}"
+@model Employees.EditModel
+@{
+    var photoPath = $"/images/{Model.Employee.PhotoPath ?? "noimage.png"}";
+    var flag = Model.Employee.Id > 0;
+    var buttonTitle = flag ? "Update" : "Create";
+    var pageTitle = flag ? "Edit" : "Add";
+    var cancelPath = flag ? "/employees/employees" : "/";
+    ViewData["Title"] = pageTitle;
+}
+
+@if (flag)
+{
+    <form method="post" asp-page-handler="UpdateNotificationPreference">
+        <div class="row text-center notifyBlock">
+            <div class="col form-check">
+                <h1>Notification Preference</h1>
+                <input asp-for="Notify" class="form-check-input"/>
+                <label asp-for="Notify" class="form-check-label">
+                    Receive email notification when my details change
+                </label><br/>
+                <button type="submit" class="btn btn-primary text-center buttonShadow">Update Notification Preference</button>
+
+                @{
+                    if (!string.IsNullOrWhiteSpace(Model.Message))
+                    {
+                        <div class="alert @Model.AlertColor">
+                            <p class="p-3 mt-2">@Model.Message</p>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </form>
+    <hr/>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-center text-danger"></div>
+
+<form method="post" asp-page-handler="OnPost" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Employee.Id" />
+    <input type="hidden" asp-for="Employee.PhotoPath" />
+
+    <div class="row justify-content-center">
+        <div class="col col-lg-8">
+            <div class="card cardBoxShadow mt-3">
+                <div class="card-header cardHeaderStyle text-center">
+                    <div class="form-group row">
+                        <label asp-for="Employee.Name" class="col col-lg-4 col-form-label text-right">Edit Name:</label>
+                        <div class="col col-lg-6">
+                            <input asp-for="Employee.Name" class="form-control" placeholder="@Model.Employee.Name" />
+                            <span asp-validation-for="Employee.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body cardBodyStyle text-center">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-lg-8">
+                            <h4 class="cardTextLeftFloating">Employee ID: @Model.Employee.Id</h4><hr />
+                            <div class="form-group row">
+                                <label asp-for="Employee.Email" class="col col-lg-4 col-form-label text-right">Edit E-mail:</label>
+                                <div class="col col-lg-6">
+                                    <input asp-for="Employee.Email" class="form-control mr-2" placeholder="@Model.Employee.Email" />
+                                    <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group row">
+                                <label asp-for="Employee.Department" class="col col-lg-4 col-form-label text-right">Edit Department:</label>
+                                <div class="col-12 col-lg-6">
+                                    <select asp-for="Employee.Department" class="custom-select mr-2" asp-items="Html.GetEnumSelectList<Dept>()">
+                                        <option value="">Please Select</option>
+                                    </select>
+                                    <span asp-validation-for="Employee.Department" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <div>
+                                <img src="@photoPath"
+                                     asp-append-version="true"
+                                     alt="avatar"
+                                     class="card-img-top imageThumbnail border border-primary"
+                                     style="background-image: linear-gradient(to right top, #2fb8cd, #009dda, #007de6, #0056e1, #3909c0);" />
+                                <div class="custom-file">
+                                    <input asp-for="Photo" class="custom-file-input form-control" />
+                                    <label class="custom-file-label text-left">Avatar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card-footer text-center cardFooterStyle">
+                            <button type="submit" class="btn btn-success buttonShadow">@buttonTitle</button>
+                            <a href="@cancelPath" class="btn btn-danger buttonShadow">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+        </script>
+
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+</form>
