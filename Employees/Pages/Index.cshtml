@@ -6,13 +6,28 @@
 
 <div class="row text-center">
     <div class="col">
-        <h1 class="display-4">Welcome</h1>
-        <h2>to our Company</h2>
+        <h1 class="display-4">Welcome <small>to our Company</small> </h1>
     </div>
 </div>
 
-<div class="row text-center">
-    <div class="col">
-        <img src="/images/banner.jpeg" alt="banner"  class="w-75 img-fluid img-thumbnail" />
+<div class="row justify-content-center">
+    <div class="col col-lg-8">
+
+
+        <div class="card cardBoxShadow mt-3">
+
+            <div class="card-header cardHeaderStyle">
+                <h1>Our Employees</h1>
+            </div>
+
+            <div class="card-body text-center cardBodyStyle">
+                <div class="row">
+                    <div class="col">
+                        @await Component.InvokeAsync("HeadCount");
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>

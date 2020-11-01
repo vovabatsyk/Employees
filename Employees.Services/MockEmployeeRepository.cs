@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Employees.Models;
 
 namespace Employees.Services
@@ -16,7 +14,7 @@ namespace Employees.Services
             {
                 new Employee()
                 {
-                    Id = 0, Name = "admin", Email = "admin@gmail.com", PhotoPath = "avatar5.png", Department = Dept.None
+                    Id = 0, Name = "webDesign", Email = "admin@gmail.com", PhotoPath = "avatar5.png", Department = Dept.None
                 },
                 new Employee()
                 {
@@ -36,10 +34,18 @@ namespace Employees.Services
                 },
                 new Employee()
                 {
-                    Id = 4, Name = "Mary", Email = "mary@gmail.com", Department = Dept.HR
+                    Id = 5, Name = "Mary", Email = "mary@gmail.com",  Department = Dept.HR
                 }
 
             };
+        }
+
+        public IEnumerable<Employee> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return _employeesList;
+
+            return _employeesList.Where(e => e.Name.ToLower().Contains(searchTerm.ToLower()) || e.Email.ToLower().Contains(searchTerm.ToLower()));
         }
 
         public IEnumerable<Employee> GetAllEmployees()
@@ -73,6 +79,27 @@ namespace Employees.Services
             _employeesList.Add(newEmployee);
 
             return newEmployee;
+        }
+
+        public Employee Delete(int id)
+        {
+            Employee employee = _employeesList.FirstOrDefault(e => e.Id == id);
+            if (employee != null) _employeesList.Remove(employee);
+
+            return employee;
+        }
+
+        public IEnumerable<DepartmentHeadCount> EmployeeCountByDepartment(Dept? dept)
+        {
+            IEnumerable<Employee> query = _employeesList;
+            if (dept.HasValue) query = query.Where(x => x.Department == dept.Value);
+            
+            return query.GroupBy(e => e.Department)
+                .Select(x => new DepartmentHeadCount()
+                {
+                    Department = x.Key.Value,
+                    Count = x.Count()
+                }).ToList();
         }
     }
 }
